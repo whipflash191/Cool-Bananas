@@ -22,6 +22,7 @@ public class LevelMovement : MonoBehaviour
     public float aspRatio;
     public float gameWidth = 0;
     public float gameHeight = 0;
+    public float distanceFromCentre = 0.5f;
     public List<GameObject> tiles = new List<GameObject>();
 
     private void Start()
@@ -36,10 +37,20 @@ public class LevelMovement : MonoBehaviour
     {
         foreach (GameObject item in tiles)
         {
-            if (Vector2.Distance(item.transform.position, new Vector2(0, 0)) > (gameWidth / 2 + 0.5f))
+            if (Vector2.Distance(item.transform.position, new Vector2(0, 0)) > (gameWidth / 2 + distanceFromCentre))
             {
+                if(item == tiles[0])
+                {
+                    tiles.Remove(item);
+                    tiles.Add(item);
+                    item.transform.position = tiles[tiles.Count - 1].transform.GetChild(0).transform.position;
+                }
                 print(item.transform.name + " " + Vector2.Distance(item.transform.position, new Vector2(0, 0)));
                 item.GetComponent<SpriteRenderer>().enabled = false;
+            }
+            else
+            {
+                item.GetComponent<SpriteRenderer>().enabled = true;
             }
         }
     }
