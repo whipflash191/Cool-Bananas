@@ -23,7 +23,8 @@ public class LevelMovement : MonoBehaviour
     public float gameWidth = 0;
     public float gameHeight = 0;
     public float distanceFromCentre = 0.5f;
-    public List<GameObject> tiles = new List<GameObject>();
+    public List<GameObject> activeTiles = new List<GameObject>();
+    public List<GameObject> inactiveTiles = new List<GameObject>();
 
     private void Start()
     {
@@ -35,17 +36,21 @@ public class LevelMovement : MonoBehaviour
 
     private void Update()
     {
-        foreach (GameObject item in tiles)
+        foreach (GameObject item in activeTiles)
         {
             if (Vector2.Distance(item.transform.position, new Vector2(0, 0)) > (gameWidth / 2 + distanceFromCentre))
             {
-                if(item == tiles[0])
+                if(item == activeTiles[0])
                 {
-                    tiles.Remove(item);
-                    tiles.Add(item);
-                    item.transform.position = tiles[tiles.Count - 1].transform.GetChild(0).transform.position;
+                    activeTiles.Remove(item);
+                    int tileToAdd = (int)Random.Range(0, inactiveTiles.Count - 1);
+                    activeTiles.Add(inactiveTiles[tileToAdd]);
+                    inactiveTiles.RemoveAt(tileToAdd);
+                    inactiveTiles.Add(item);
+                    activeTiles[activeTiles.Count - 1].transform.position = new Vector3((activeTiles[(activeTiles.Count - 2)].transform.position.x + 45.149992f), (activeTiles[(activeTiles.Count - 2)].transform.position.y + -21.94f), activeTiles[(activeTiles.Count - 2)].transform.position.z);
+                    //activeTiles.Add(item);
                 }
-                print(item.transform.name + " " + Vector2.Distance(item.transform.position, new Vector2(0, 0)));
+                //print(item.transform.name + " " + Vector2.Distance(item.transform.position, new Vector2(0, 0)));
                 item.GetComponent<SpriteRenderer>().enabled = false;
             }
             else
