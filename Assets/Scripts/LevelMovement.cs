@@ -17,6 +17,9 @@ public class LevelMovement : MonoBehaviour
     public float maxSpeed;
     public float currentSpeed;
 
+    public float xIncrement = -4.096f;
+    public float yIncrement = 2.256f;
+
     //Off Screen Checks
     public float orthSize;
     public float aspRatio;
@@ -36,28 +39,37 @@ public class LevelMovement : MonoBehaviour
 
     private void Update()
     {
+        List<GameObject> tempTiles = new List<GameObject>();
+        foreach (GameObject item in activeTiles)
+        {
+            tempTiles.Add(item);
+        }
+
         foreach (GameObject item in activeTiles)
         {
             if (Vector2.Distance(item.transform.position, new Vector2(0, 0)) > (gameWidth / 2 + distanceFromCentre))
             {
                 if(item == activeTiles[0])
                 {
-                    activeTiles.Remove(item);
+                    //activeTiles.Remove(item);
+                    tempTiles.Remove(item);
                     int tileToAdd = (int)Random.Range(0, inactiveTiles.Count - 1);
-                    activeTiles.Add(inactiveTiles[tileToAdd]);
+                    //activeTiles.Add(inactiveTiles[tileToAdd]);
+                    tempTiles.Add(inactiveTiles[tileToAdd]);
                     inactiveTiles.RemoveAt(tileToAdd);
                     inactiveTiles.Add(item);
-                    activeTiles[activeTiles.Count - 1].transform.position = new Vector3((activeTiles[(activeTiles.Count - 2)].transform.position.x + 45.149992f), (activeTiles[(activeTiles.Count - 2)].transform.position.y + -21.94f), activeTiles[(activeTiles.Count - 2)].transform.position.z);
-                    //activeTiles.Add(item);
+                    tempTiles[tempTiles.Count - 1].transform.position = new Vector3((tempTiles[(tempTiles.Count - 2)].transform.position.x + 45.12f), (tempTiles[(tempTiles.Count - 2)].transform.position.y + -20.48f), tempTiles[(tempTiles.Count - 2)].transform.position.z);
                 }
                 //print(item.transform.name + " " + Vector2.Distance(item.transform.position, new Vector2(0, 0)));
                 item.GetComponent<SpriteRenderer>().enabled = false;
             }
             else
             {
-                item.GetComponent<SpriteRenderer>().enabled = true;
+               item.GetComponent<SpriteRenderer>().enabled = true;
             }
         }
+
+        activeTiles = tempTiles;
     }
 
     private void FixedUpdate()
@@ -66,6 +78,7 @@ public class LevelMovement : MonoBehaviour
         {
             currentSpeed += Mathf.Lerp(0, maxSpeed, (Time.deltaTime * mvmntScale));
         }
-        gameObject.transform.Translate((mvmntDirection * Time.deltaTime * currentSpeed));
+        gameObject.transform.position = new Vector3(gameObject.transform.position.x + xIncrement, gameObject.transform.position.y + yIncrement, gameObject.transform.position.z);
+        //gameObject.transform.Translate((mvmntDirection * Time.deltaTime * currentSpeed));
     }
 }
