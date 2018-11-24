@@ -51,16 +51,13 @@ public class LevelMovement : MonoBehaviour
             {
                 if(item == activeTiles[0])
                 {
-                    //activeTiles.Remove(item);
                     tempTiles.Remove(item);
                     int tileToAdd = (int)Random.Range(0, inactiveTiles.Count - 1);
-                    //activeTiles.Add(inactiveTiles[tileToAdd]);
                     tempTiles.Add(inactiveTiles[tileToAdd]);
                     inactiveTiles.RemoveAt(tileToAdd);
                     inactiveTiles.Add(item);
-                    tempTiles[tempTiles.Count - 1].transform.position = new Vector3((tempTiles[(tempTiles.Count - 2)].transform.position.x + 45.12f), (tempTiles[(tempTiles.Count - 2)].transform.position.y + -20.48f), tempTiles[(tempTiles.Count - 2)].transform.position.z);
+                    tempTiles[tempTiles.Count - 1].transform.position = new Vector3((tempTiles[(tempTiles.Count - 2)].transform.position.x + 40.96f), (tempTiles[(tempTiles.Count - 2)].transform.position.y + -20.48f), tempTiles[(tempTiles.Count - 2)].transform.position.z);
                 }
-                //print(item.transform.name + " " + Vector2.Distance(item.transform.position, new Vector2(0, 0)));
                 item.GetComponent<SpriteRenderer>().enabled = false;
             }
             else
@@ -78,7 +75,7 @@ public class LevelMovement : MonoBehaviour
         {
             currentSpeed += Mathf.Lerp(0, maxSpeed, (Time.deltaTime * mvmntScale));
         }
-        gameObject.transform.position = new Vector3(gameObject.transform.position.x + xIncrement, gameObject.transform.position.y + yIncrement, gameObject.transform.position.z);
-        //gameObject.transform.Translate((mvmntDirection * Time.deltaTime * currentSpeed));
+        //gameObject.transform.position = new Vector3(gameObject.transform.position.x + xIncrement, gameObject.transform.position.y + yIncrement, gameObject.transform.position.z);
+        gameObject.transform.Translate((mvmntDirection * Time.deltaTime * currentSpeed));
     }
 }
