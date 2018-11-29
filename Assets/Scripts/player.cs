@@ -43,7 +43,7 @@ public class player : MonoBehaviour {
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.tag == "floor")
+        if(collision.gameObject.tag == "Tile")
         {
             currentMaxJumpHeight = maxJumpHeight;
             canJump = true;
@@ -52,7 +52,7 @@ public class player : MonoBehaviour {
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if(collision.gameObject.tag == "floor")
+        if(collision.gameObject.tag == "Tile")
         {
             canJump = false;
         }

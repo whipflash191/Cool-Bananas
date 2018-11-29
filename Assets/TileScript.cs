@@ -3,18 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TileScript : MonoBehaviour {
-    BoxCollider2D spawnBounds;
-    PolygonCollider2D cantSpawn; 
+    PolygonCollider2D cantSpawn;
 
+    public List<Transform> spawnPoints = new List<Transform>();
     public GameObject spawnPoint;
     public Transform gridStartPoint;
+    public float gridX;
+    public float gridY;
 
 	// Use this for initialization
 	void Start ()
     {
-        spawnBounds = GetComponent<BoxCollider2D>();
         cantSpawn = GetComponent<PolygonCollider2D>();
         SpawnGrid();
+        GenerateSpawnList();
     }
 	
 	// Update is called once per frame
@@ -24,15 +26,27 @@ public class TileScript : MonoBehaviour {
 
     void SpawnGrid()
     {
-        int gridX = (int)spawnBounds.size.x + 1;
-        int gridY = (int)spawnBounds.size.y + 1;
+        int finalGridX = (int)gridX + 1;
+        int finalGridY = ((int)gridY + 1) / 2;
 
-        for (int y = 0; y < gridY; y++)
+        for (int y = 0; y < finalGridY; y++)
         {
-            for (int x = 0; x < gridX; x++)
+            for (int x = 0; x < finalGridX; x++)
             {
                 Vector3 tempPos = new Vector3((gridStartPoint.position.x + 0.5f) + x, (gridStartPoint.position.y + y + 0.5f), 0f);
                 Instantiate(spawnPoint, tempPos, Quaternion.identity, transform);
+            }
+        }
+    }
+
+    void GenerateSpawnList()
+    {
+        Transform[] temp = GetComponentsInChildren<Transform>();
+        foreach (Transform item in temp)
+        {
+            if(item.gameObject.tag != "GridStart")
+            {
+                spawnPoints.Add(item);
             }
         }
     }

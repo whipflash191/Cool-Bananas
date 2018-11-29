@@ -14,7 +14,7 @@ public class ObsticleSpawnPoint : MonoBehaviour {
 		
 	}
 
-    private void OnTriggerStay2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         Debug.Log("got here");
         if (collision.gameObject.tag == "Tile")
