@@ -17,7 +17,7 @@ public class ObsticleSpawnPoint : MonoBehaviour {
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Debug.Log("got here");
-        if (collision.gameObject.tag == "Tile")
+        if (collision.gameObject.tag == "Tile" || collision.gameObject.tag == "Gap")
         {
             Debug.Log("hit");
             Destroy(gameObject);
