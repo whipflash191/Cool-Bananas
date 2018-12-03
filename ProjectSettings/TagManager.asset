@@ -7,7 +7,7 @@ TagManager:
   - floor
   - Tile
   - GridStart
-  - Gap
+  - Obstacle
   layers:
   - Default
   - TransparentFX
