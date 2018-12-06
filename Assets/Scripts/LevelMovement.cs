@@ -6,6 +6,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class LevelMovement : MonoBehaviour
 {
@@ -16,7 +17,6 @@ public class LevelMovement : MonoBehaviour
     [Range(0, 100)]
     public float maxSpeed;
     public float currentSpeed;
-
     public float xIncrement = -4.096f;
     public float yIncrement = 2.256f;
 
@@ -28,6 +28,10 @@ public class LevelMovement : MonoBehaviour
     public float distanceFromCentre = 0.5f;
     public List<GameObject> activeTiles = new List<GameObject>();
     public List<GameObject> inactiveTiles = new List<GameObject>();
+
+    //Score
+    public int currentScore = 0;
+    public TextMeshProUGUI scoreText;
 
     private void Start()
     {
@@ -57,6 +61,12 @@ public class LevelMovement : MonoBehaviour
                     inactiveTiles.RemoveAt(tileToAdd);
                     inactiveTiles.Add(item);
                     tempTiles[tempTiles.Count - 1].transform.position = new Vector3((tempTiles[(tempTiles.Count - 2)].transform.position.x + 40.96f), (tempTiles[(tempTiles.Count - 2)].transform.position.y + -20.48f), tempTiles[(tempTiles.Count - 2)].transform.position.z);
+                    if (currentSpeed < maxSpeed)
+                    {
+                        currentSpeed += Mathf.Lerp(0, maxSpeed, (Time.deltaTime * mvmntScale));
+                        currentScore += 100;
+                        scoreText.text = currentScore.ToString();
+                    }
                 }
                 item.GetComponent<SpriteRenderer>().enabled = false;
             }
@@ -71,11 +81,6 @@ public class LevelMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (currentSpeed < maxSpeed)
-        {
-            currentSpeed += Mathf.Lerp(0, maxSpeed, (Time.deltaTime * mvmntScale));
-        }
-        //gameObject.transform.position = new Vector3(gameObject.transform.position.x + xIncrement, gameObject.transform.position.y + yIncrement, gameObject.transform.position.z);
         gameObject.transform.Translate((mvmntDirection * Time.deltaTime * currentSpeed));
     }
 }

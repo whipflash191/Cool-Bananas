@@ -5,6 +5,7 @@ using UnityEngine;
 public class TileScript : MonoBehaviour {
 
     public bool spawnGrid;
+    public bool firstRun;
 
     public float gridX;
     public float gridY;
@@ -25,6 +26,11 @@ public class TileScript : MonoBehaviour {
         } else
         {
             GenerateSpawnList();
+        }
+
+        if(firstRun)
+        {
+            GenerateObstacles();
         }
 
     }

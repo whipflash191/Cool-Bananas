@@ -5,16 +5,17 @@ using UnityEngine;
 public class player : MonoBehaviour {
     public bool canJump = false;
     bool jump;
-    Rigidbody2D rb;
+    public Rigidbody2D rb;
     public float jumpForce = 0;
     [Range(0, 1000)]
     public float maxJumpHeight;
     public float currentMaxJumpHeight;
     [Range(0, 100)]
     public float climbRate;
-	// Use this for initialization
-	void Start () {
-        rb = GetComponent<Rigidbody2D>();
+    // Use this for initialization
+
+    void Start ()
+    {
         currentMaxJumpHeight = maxJumpHeight;
 	}
 
@@ -23,6 +24,17 @@ public class player : MonoBehaviour {
     { 
         if (Input.touchCount > 0)
         {
+            Touch touch = Input.GetTouch(0);
+
+            switch (touch.phase)
+            {
+                case TouchPhase.Stationary:
+                    climbRate = 25f;
+                    break;
+                case TouchPhase.Began:
+                    climbRate = 50f;
+                    break;
+            }
             jump = true;
         } else
         {
