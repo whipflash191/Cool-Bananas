@@ -11,7 +11,7 @@ public class EndTemp: MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        scoreText.SetText(PlayerPrefs.GetInt("score").ToString());
     }
 
     // Update is called once per frame

@@ -34,9 +34,6 @@ public class player : MonoBehaviour {
                 case TouchPhase.Stationary:
                     climbRate = 25f;
                     break;
-                case TouchPhase.Began:
-                    climbRate = 50f;
-                    break;
             }
             jump = true;
         } else
