@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class player : MonoBehaviour {
     public bool canJump = false;
@@ -12,11 +13,13 @@ public class player : MonoBehaviour {
     public float currentMaxJumpHeight;
     [Range(0, 100)]
     public float climbRate;
+    LevelMovement levelRef;
     // Use this for initialization
 
     void Start ()
     {
         currentMaxJumpHeight = maxJumpHeight;
+        levelRef = FindObjectOfType<LevelMovement>();
 	}
 
     // Update is called once per frame
@@ -53,12 +56,23 @@ public class player : MonoBehaviour {
         }
     }
 
+    void GameOver()
+    {
+        PlayerPrefs.SetInt("score", levelRef.currentScore);
+        SceneManager.LoadScene(2);
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if(collision.gameObject.tag == "Tile")
         {
             currentMaxJumpHeight = maxJumpHeight;
             canJump = true;
+        }
+
+        if(collision.gameObject.tag == "Obstacle")
+        {
+            GameOver();
         }
     }
 
