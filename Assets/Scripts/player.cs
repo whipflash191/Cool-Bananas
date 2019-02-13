@@ -7,34 +7,38 @@ public class player : MonoBehaviour {
     public bool canJump = false;
     bool jump;
     public Rigidbody2D rb;
-    public float jumpForce = 0;
-    [Range(0, 1000)]
-    public float maxJumpHeight;
-    public float currentMaxJumpHeight;
-    [Range(0, 100)]
-    public float climbRate;
+    public float jumpForce = 0f;
+    public float fallSpeed = 0f;
+    public float lowJumpMultiplier = 0f;
+    public float distance = 0;
+    public float gravityScaleReset = 1f;
     LevelMovement levelRef;
     // Use this for initialization
 
     void Start ()
     {
-        currentMaxJumpHeight = maxJumpHeight;
         levelRef = FindObjectOfType<LevelMovement>();
 	}
 
     // Update is called once per frame
     private void Update()
-    { 
+    {
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down);
+        if (hit.collider != null)
+        {
+            distance = Vector2.Distance(hit.point, transform.position);
+            if (distance <= 2f)
+            {
+                canJump = true;
+            }
+            else
+            {
+                canJump = false;
+            }
+        }
+
         if (Input.touchCount > 0)
         {
-            Touch touch = Input.GetTouch(0);
-
-            switch (touch.phase)
-            {
-                case TouchPhase.Stationary:
-                    climbRate = 25f;
-                    break;
-            }
             jump = true;
         } else
         {
@@ -43,13 +47,21 @@ public class player : MonoBehaviour {
     }
     void FixedUpdate ()
     {
-        if (jump)
+
+        if (jump && canJump)
         {
-            if (currentMaxJumpHeight > 0)
-            {
-                currentMaxJumpHeight -= climbRate;
-                rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Force);
-            }
+            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        }
+        
+        if(rb.velocity.y < 0)
+        {
+            rb.gravityScale = fallSpeed;
+        } else if (rb.velocity.y > 0 && Input.touchCount <= 0)
+        {
+            rb.gravityScale = lowJumpMultiplier;
+        } else
+        {
+            rb.gravityScale = gravityScaleReset;
         }
     }
 
@@ -61,23 +73,10 @@ public class player : MonoBehaviour {
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.tag == "Tile")
-        {
-            currentMaxJumpHeight = maxJumpHeight;
-            canJump = true;
-        }
 
         if(collision.gameObject.tag == "Obstacle")
         {
             GameOver();
-        }
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if(collision.gameObject.tag == "Tile")
-        {
-            canJump = false;
         }
     }
 }
